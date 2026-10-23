@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tic Tac Toe</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;700&family=Space+Grotesk:wght@500;700&family=Sora:wght@500;700&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+<canvas id="bg" aria-hidden="true"></canvas>
+<canvas id="fx" aria-hidden="true"></canvas>
+<div class="banner" id="banner" role="status"></div>
+<main class="app">
+  <header>
+    <h1 class="logo" aria-label="Tic Tac Toe">
+      <svg class="logo-mark" viewBox="0 0 48 48" aria-hidden="true">
+        <path class="g" d="M16 3v42M32 3v42M3 16h42M3 32h42"/>
+        <path class="lx" pathLength="1" style="animation-delay:.1s" d="M5.5 5.5l8 8M13.5 5.5l-8 8"/>
+        <circle class="lo" pathLength="1" style="animation-delay:.35s" cx="24" cy="24" r="5"/>
+        <path class="lx" pathLength="1" style="animation-delay:.6s" d="M34.5 34.5l8 8M42.5 34.5l-8 8"/>
+      </svg>
+      <span class="logo-text">
+        <span class="logo-words" aria-hidden="true"><span class="t1">Tic</span><span class="t2">Tac</span><span class="t3">Toe</span></span>
+        <span class="logo-bar" aria-hidden="true"></span>
+      </span>
+    </h1>
+    <div class="tools">
+    <div class="dd themes" id="themeDd">
+      <button class="btn dd-btn" id="themeBtn" aria-haspopup="true" aria-expanded="false" aria-controls="themeMenu"><i class="sw" id="themeSw" data-t="neon"></i><span class="k">Theme</span><b id="themeLabel">Neon</b><svg class="chev" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4.5l4 4 4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <div class="dd-menu" id="themeMenu" role="group" aria-label="Choose a theme" hidden>
+        <button data-t="neon" aria-pressed="true"><i class="sw" data-t="neon"></i><span>Neon<small>Electric blue and violet</small></span></button>
+        <button data-t="paper" aria-pressed="false"><i class="sw" data-t="paper"></i><span>Paper<small>Clean light, ink and rose</small></span></button>
+        <button data-t="lagoon" aria-pressed="false"><i class="sw" data-t="lagoon"></i><span>Lagoon<small>Deep teal and sunny gold</small></span></button>
+        <button data-t="aurora" aria-pressed="false"><i class="sw" data-t="aurora"></i><span>Aurora<small>Midnight with mint and pink</small></span></button>
+      </div>
+    </div>
+    <button class="btn dd-btn" id="mute" aria-label="Toggle sound"><span class="ico" id="muteIco">🔊</span><span class="k">Sound</span><b id="muteLabel">On</b></button>
+    </div>
+  </header>
+  <section class="controls" aria-label="Game mode">
+    <div class="seg split" id="modes" role="group" aria-label="Opponent">
+      <button data-m="pvp" aria-pressed="true">2 Players</button>
+      <button data-m="ai" aria-pressed="false">vs Computer</button>
+    </div>
+    <div class="dd" id="levels" hidden>
+      <button class="btn dd-btn" id="levelBtn" aria-haspopup="true" aria-expanded="false" aria-controls="levelMenu"><i class="dot" id="levelDot" data-l="Medium"></i><span class="k">Difficulty</span><b id="levelLabel">Medium</b><svg class="chev" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4.5l4 4 4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <div class="dd-menu right" id="levelMenu" role="group" aria-label="Choose a difficulty" hidden>
+        <button data-l="Easy" aria-pressed="false"><i class="dot" data-l="Easy"></i><span>Easy<small>Plays random moves</small></span></button>
+        <button data-l="Medium" aria-pressed="true"><i class="dot" data-l="Medium"></i><span>Medium<small>Blocks you most of the time</small></span></button>
+        <button data-l="Hard" aria-pressed="false"><i class="dot" data-l="Hard"></i><span>Hard<small>Never makes a mistake</small></span></button>
+      </div>
+    </div>
+  </section>
+  <section class="status" aria-label="Scoreboard">
+    <div class="score x" id="sx"><b id="nx">0</b><span id="lx">Player X</span></div>
+    <div class="score" id="sd"><b id="nd">0</b><span>Draws</span></div>
+    <div class="score o" id="so"><b id="no">0</b><span id="lo">Player O</span></div>
+  </section>
+  <section class="board-wrap">
+    <div class="msg" id="msg" aria-live="polite"></div>
+    <div class="stage">
+      <div class="board" id="board"><svg id="strike" aria-hidden="true"></svg></div>
+      <div class="history" id="history" hidden>
+        <h2>History <button id="clear">Clear</button></h2>
+        <ul id="list"></ul>
+      </div>
+    </div>
+    <div class="actions">
+      <button class="btn" id="histBtn" aria-expanded="false" aria-controls="history" aria-label="History" title="History">📜</button>
+      <button class="btn primary" id="again">New game</button>
+      <button class="btn" id="exitBtn" aria-haspopup="dialog" title="Exit game">✕ Exit</button>
+    </div>
+  </section>
+</main>
+<div class="dim" id="dim" aria-hidden="true"></div>
+<div class="lamp" id="lamp">
+  <svg viewBox="0 0 340 240" aria-label="Desk lamp" role="group">
+    <defs>
+      <linearGradient id="cg" x1="0" y1="0" x2="1" y2="1"><stop class="s1" offset="0"/><stop class="s2" offset="1"/></linearGradient>
+      <radialGradient id="pg"><stop class="s1" offset="0"/><stop class="s2" offset="1"/></radialGradient>
+    </defs>
+    <g class="lit">
+      <polygon class="cone" points="67,92 124,62 340,226 150,226" fill="url(#cg)"/>
+      <ellipse class="pool" cx="245" cy="226" rx="105" ry="10" fill="url(#pg)"/>
+    </g>
+    <ellipse class="body" cx="80" cy="229" rx="48" ry="8"/>
+    <line class="arm" x1="80" y1="224" x2="62" y2="134" stroke-width="7"/>
+    <line class="arm" x1="62" y1="134" x2="90" y2="66" stroke-width="6"/>
+    <circle class="joint" cx="62" cy="134" r="8"/>
+    <g transform="rotate(-28 90 66)">
+      <path class="body" d="M50 78 C50 30 130 30 130 78 Z"/>
+      <ellipse class="bulb" cx="90" cy="78" rx="32" ry="6"/>
+    </g>
+    <g class="cord" id="cord" role="button" tabindex="0" aria-label="Pull cord to toggle lamp" aria-pressed="true">
+      <rect x="98" y="74" width="28" height="74" fill="transparent"/>
+      <line class="string" x1="112" y1="76" x2="112" y2="126"/>
+      <circle class="knob" cx="112" cy="133" r="6"/>
+    </g>
+  </svg>
+</div>
+
+<div class="modal" id="exitModal" role="dialog" aria-modal="true" aria-labelledby="exitTitle" hidden>
+  <div class="modal-card">
+    <p id="exitTitle">Are you sure you want to exit the game?</p>
+    <div class="modal-actions">
+      <button class="btn danger" id="exitYes">Yes</button>
+      <button class="btn" id="exitNo">No</button>
+    </div>
+  </div>
+</div>
+<div class="closed" id="closedScreen" role="status" hidden>
+  <h2>Game closed</h2>
+  <p>Thanks for playing!</p>
+  <button class="btn primary" id="playAgain">Play again</button>
+</div>
+<script src="script.js"></script>
+</body>
+</html>
